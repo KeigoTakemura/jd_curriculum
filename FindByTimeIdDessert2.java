@@ -4,7 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class FindByTimeIdDessert {
+public class FindByTimeIdDessert2 {
     public static void main(String[] args) {
         // MySQLデータベースの接続URL
         final String URL = "jdbc:oracle:thin:@localhost:1521/orclpdb";
@@ -13,10 +13,10 @@ public class FindByTimeIdDessert {
         // ユーザーのパスワード
         final String USER_PASS = "Jdpass123";
 
-        // TIME_ID
+        // ID
         int time_id = 2;
-        //dessertテーブルからIDに合致するレコードを検索するSQL文
-        String sql = "SELECT * FROM dessert WHERE time_id = ?";
+        //dessertテーブルからdelete_dateがnullであるすべてのレコードを検索するSQL文
+        String sql = "SELECT * FROM dessert WHERE delete_date IS NULL AND time_id = ?";
         
         // データベース接続、準備済みステートメント、および結果セットのプライベート変数を宣言する
         Connection con = null;
