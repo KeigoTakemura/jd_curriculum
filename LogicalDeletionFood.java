@@ -3,6 +3,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
+
 
 public class LogicalDeletionFood {
     public static void main(String[] args) {
@@ -13,8 +15,15 @@ public class LogicalDeletionFood {
         // ユーザーのパスワード
         final String USER_PASS = "Jdpass123";
         
+        // 論理削除したい対象のIDを入力指定できる
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("IDを入力してください");
+        String id = scanner.next();
+        scanner.close();
+        
         // ID
-        int id = 1;
+        // int id = 1;
+        
         // foodテーブルのIDに一致するフード情報を論理削除するSQL文
         String sql = "UPDATE food SET delete_date = CURRENT_TIMESTAMP WHERE id = ?";
         
@@ -29,7 +38,7 @@ public class LogicalDeletionFood {
             // SELECT文の準備
             ps = con.prepareStatement(sql);
             // パラメーターを設定
-            ps.setInt(1, id);
+            ps.setString(1, id);
 
             // SELECT文を実行して結果を取得
             int count = ps.executeUpdate();

@@ -3,6 +3,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
+
 
 public class LogicalDeletionStudent {
     public static void main(String[] args) {
@@ -13,8 +15,15 @@ public class LogicalDeletionStudent {
         // ユーザーのパスワード
         final String USER_PASS = "Jdpass123";
         
+        // 論理削除したい対象のIDを入力指定できる
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("IDを入力してください");
+        String id = scanner.next();
+        scanner.close();
+        
         // 学生ID
-        int id = 1;
+        // int id = 1;
+        
         // studentテーブルのIDに一致する学生情報を論理削除するSQL文
         String sql = "UPDATE student SET delete_date = CURRENT_TIMESTAMP WHERE id = ?";
         
@@ -29,7 +38,7 @@ public class LogicalDeletionStudent {
             // SELECT文の準備
             ps = con.prepareStatement(sql);
             // パラメーターを設定
-            ps.setInt(1, id);
+            ps.setString(1, id);
 
             // SELECT文を実行して結果を取得
             int count = ps.executeUpdate();
