@@ -1,11 +1,11 @@
 import java.util.Scanner;
 
-import service.UserService;
+import service.FruitService;
 
 public class Main {
     public static void main(String[] args) {
-        // UserServiceのインスタンスを生成
-        UserService userService = new UserService();
+        // FruitServiceのインスタンスを生成
+        FruitService fruitService = new FruitService();
 
         // 入力を受け付けるためのScannerオブジェクト
         try (Scanner scanner = new Scanner(System.in)) {
@@ -23,14 +23,14 @@ public class Main {
                 switch (action) {
                     case 1:
                         // 全件検索
-                        userService.findAll();
+                        fruitService.findAll();
                         break;
                     case 2:
                         // ID検索
                         System.out.print("検索対象者のIDを入力してください。:");
                         Integer searchId = scanner.nextInt();
 
-                        userService.findById(searchId);
+                        fruitService.findById(searchId);
                         break;
                     case 3:
                         // 新規登録
@@ -39,30 +39,32 @@ public class Main {
                         Integer saveId = scanner.nextInt();
                         System.out.print("名前を入力してください。: ");
                         String saveName = scanner.next();
-                        System.out.print("年齢を入力してください。: ");
-                        Integer saveAge = scanner.nextInt();
-                        System.out.print("性別を入力してください。: ");
-                        Integer saveGender = scanner.nextInt();
+                        System.out.print("値段を入力してください。: ");
+                        Integer savePrice = scanner.nextInt();
+                        System.out.print("産地を入力してください。: ");
+                        Integer savePrefecture_id = scanner.nextInt();
+                        System.out.print("季節を入力してください。: ");
+                        Integer saveSeason_id = scanner.nextInt();
 
-                        userService.save(saveId, saveName, saveAge, saveGender);
+                        fruitService.save(saveId, saveName, savePrice, savePrefecture_id, saveSeason_id);
                         break;
                     case 4:
                         // 更新
                         System.out.println("更新情報を入力してください。");
-                        System.out.print("更新対象者のユーザーIDを入力してください。: ");
+                        System.out.print("更新対象者のIDを入力してください。: ");
                         Integer updateId = scanner.nextInt();
-                        System.out.print("更新後の年齢を入力してください。: ");
-                        Integer updateAge = scanner.nextInt();
+                        System.out.print("更新後の値段を入力してください。: ");
+                        Integer updatePrice = scanner.nextInt();
 
-                        userService.update(updateId, updateAge);
+                        fruitService.update(updateId, updatePrice);
                         break;
                     case 5:
                         // 削除
                         System.out.println("削除情報を入力してください。");
-                        System.out.print("削除対象者のユーザーIDを入力してください。: ");
+                        System.out.print("削除対象者のIDを入力してください。: ");
                         Integer deleteId = scanner.nextInt();
 
-                        userService.delete(deleteId);
+                        fruitService.delete(deleteId);
                         break;
                     case 6:
                         // 	論理削除
@@ -70,7 +72,7 @@ public class Main {
                         System.out.print("論理削除対象者のユーザーIDを入力してください。: ");
                         Integer logicalId = scanner.nextInt();
 
-                        userService.logical(logicalId);
+                        fruitService.logical(logicalId);
                         break;
                 }
 
