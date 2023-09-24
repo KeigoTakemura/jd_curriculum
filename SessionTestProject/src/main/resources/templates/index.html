@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Session Control</title>
+</head>
+<body>
+	<h1>Session Control</h1>
+	
+	<form th:method="post">
+		<p th:text="${num}"></p>
+		<button type="submit" th:formaction="@{/up}">Up</button>
+		<button type="submit" th:formaction="@{/reset}">Reset</button>
+	</form>
+</body>
+</html>
