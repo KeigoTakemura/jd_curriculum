@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.form.IdData;
 import com.example.demo.form.NameData;
+import com.example.demo.form.ScoreData;
 
 // ControllerクラスがマッピングするURLを定義する
 @RequestMapping("/")
@@ -95,15 +97,15 @@ public class HelloController {
     @PostMapping("/hello7")
     // @ModelAttribute: リクエストパラメーターから受け取ったデータからNameDataオブジェクトを作成する
     // ModelAndView: ビュー名とモデルデータを保持するオブジェクト
-    public ModelAndView hello7(@ModelAttribute NameData nameData, @ModelAttribute NameData idData, @ModelAttribute NameData scoreData, ModelAndView mv) {
+    public ModelAndView hello7(@ModelAttribute NameData nameData, @ModelAttribute IdData idData, @ModelAttribute ScoreData scoreData, ModelAndView mv) {
         // 表示するHtmlの設定
         mv.setViewName("hello7");
         // 「name」という名前でリクエストパラメーターの値を受け渡す
         mv.addObject("NameData", nameData);
         // 「id」という名前でリクエストパラメーターの値を受け渡す
-        mv.addObject("NameData", idData);
+        mv.addObject("IdData", idData);
         // 「score」という名前でリクエストパラメーターの値を受け渡す
-        mv.addObject("NameData", scoreData);
+        mv.addObject("ScoreData", scoreData);
         // 設定したモデルデータとViewを返す
         return mv;
     }
