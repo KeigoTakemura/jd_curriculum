@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- Thymeleafテンプレートエンジンを使用していることを示す -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>フルーツ情報</title>
+</head>
+<body>
+    <h1>フルーツ情報</h1>
+
+	<!-- リンク先のURLを指定する -->
+    <a th:href="@{/create}">新規登録</a>
+    <hr>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>名称</th>
+            <th>価格</th>
+            <th>産地</th>
+            <th>旬の季節</th>
+        </tr>
+		<!-- th:each - userListから	フルーツ情報を一行ずつ取得し、fruit変数に格納 -->
+        <tr th:each="fruit:${fruitList}">
+			<!-- th:text - fruitオブジェクトのidプロパティにアクセスし表示 -->
+            <td th:text="${fruit.id}"></td>
+			<!-- th:href - fruitオブジェクトのidプロパティにアクセスしURLに設定 -->
+			<!-- th:text - fruitオブジェクトのnameプロパティにアクセスし表示 -->
+            <td><a th:href="@{/edit/__${fruit.id}__}" th:text="${fruit.name}"></a></td>
+			<!-- th:text - fruitオブジェクトのpriceプロパティにアクセスし表示 -->
+            <td th:text="${fruit.price}"></td>
+            <!-- th:text - fruitオブジェクトのprefecture_idプロパティにアクセスし表示 -->
+            <td th:text="${fruit.prefecture_id}"></td>
+            <!-- th:text - fruitオブジェクトのseason_idプロパティにアクセスし表示 -->
+            <td th:text="${fruit.season_id}"></td>
+            <td>
+				<!-- th:method - HTTPメソッドのDELETEを使用 -->
+				<!-- th:action - フォームの送信先を「ルートパス/delete」に設定 -->
+                <form th:method="delete" th:action="@{/delete}">
+					<!-- 非表示でデータを送信 -->
+					<!-- th:value - userオブジェクトのidプロパティにアクセスし値に設定 -->
+					<!-- リクエストパラメーターの名前をidとする -->
+                    <input type="hidden" name="id" th:value="${fruit.id}">
+                    <input type="submit" value="削除">
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
