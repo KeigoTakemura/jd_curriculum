@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -63,22 +65,39 @@ public class UserController {
     // POSTリクエストを受け取ることを指定する。また、メソッドがマッピングするURLの定義する。
     @PostMapping("/create")
     // @ModelAttribute: リクエストパラメーターから受け取ったデータからUserDataオブジェクトを作成する
-    public String save(@ModelAttribute UserData userData) {
-        // 入力フォームのデータをエンティティに変換
-        User user = userData.toEntity();
-        // 変換したデータをデータベースへ保存
-        userService.save(user);
-        // 一覧画面(index.html)へリダイレクト
-        return "redirect:/";
-    }
+    // @Validated: 入力フォームのデータ検証
+    // BindingResult: 検証結果を保持
+    // ModelAndView: ビュー名とモデルデータを保持するオブジェクト
+    public ModelAndView save(@ModelAttribute @Validated UserData userData, BindingResult result, ModelAndView mv) {
+     // 入力フォームの検証結果にエラーが含まれる場合、入力値を保持した状態で新規登録画面へ戻す。
+     if (result.hasErrors()) {
+         // 表示するView(HTML)の設定
+         mv.setViewName("create");
+         // ↓モデルデータは、HTML側と引数名(フォームクラスの変数名)が同じであれば省略可能
+         //mv.addObject("userData", userData);
+         // モデルデータとViewを返す(新規登録画面create.html)
+         return mv;
 
+     // 検証結果にエラーが含まれない場合、登録処理を行う。
+     } else {
+         // 入力フォームのデータをエンティティに変換
+         User user = userData.toEntity();
+         // 変換したデータをデータベースへ保存
+         userService.save(user);
+         // リダイレクト先の設定
+         mv.setViewName("redirect:/");
+         // モデルデータとViewを返す(一覧画面index.html)
+         return mv;
+     }
+ }
+    
     // 編集画面にアクセスするメソッド
     // GETリクエストを受け取ることを指定する。また、メソッドがマッピングするURLの定義する。
     @GetMapping("/edit/{id}")
     // @PathVariable: URLパラメーターからデータを受け取って変数にセット(バインド)する
     // ModelAndView: ビュー名とモデルデータを保持するオブジェクト
     public ModelAndView edit(@PathVariable("id") int id, ModelAndView mv) {
-        // URLパスパラメーターから受け取ったIDに一致する学生情報の取得
+        // URLパスパラメーターから受け取ったIDに一致するユーザー情報の取得
         User user = userService.findById(id);
         // 表示するView(HTML)の設定
         mv.setViewName("edit");
@@ -88,17 +107,31 @@ public class UserController {
         return mv;
     }
 
-    // 更新処理を行うメソッド
-    // PATCHリクエストを受け取ることを指定する。また、メソッドがマッピングするURLの定義する。
+    // 新規登録処理を行うメソッド
+    // PATCHリクエストを受け取ることを指定する。また、メソッドがマッピングするURLの定義する。　      
     @PatchMapping("/update")
-    // @ModelAttribute: リクエストパラメーターから受け取ったデータからUserDataオブジェクトを作成する
-    public String update(@ModelAttribute UserData userData) {
-        // 入力フォームから受け取った更新データをエンティティに変換
-        User user = userData.toEntity();
-        // 変換したデータを使用してデータベースを更新
-        userService.update(user);
-        // 更新対象者の編集画面(edit.html)へリダイレクト
-        return "redirect:/edit/" + user.getId();
+    public ModelAndView update(@ModelAttribute @Validated UserData userData, BindingResult result, ModelAndView mv) {
+        // 入力フォームの検証結果にエラーが含まれる場合、入力値を保持した状態で新規登録画面へ戻す。
+        if (result.hasErrors()) {
+            // 表示するView(HTML)の設定
+            mv.setViewName("edit");
+            // ↓モデルデータは、HTML側と引数名(フォームクラスの変数名)が同じであれば省略可能
+            //mv.addObject("userData", userData);
+            // モデルデータとViewを返す(新規登録画面edit.html)
+            return mv;
+
+        // 検証結果にエラーが含まれない場合、登録処理を行う。
+        } else {
+            // 入力フォームのデータをエンティティに変換
+            User user = userData.toEntity();
+            // 変換したデータでデータベースを更新
+            userService.update(user);
+
+            // リダイレクト先の設定
+            mv.setViewName("redirect:/");
+            // モデルデータとViewを返す(一覧画面index.html)
+            return mv;
+        }		
     }
 
     // 削除処理を行うメソッド

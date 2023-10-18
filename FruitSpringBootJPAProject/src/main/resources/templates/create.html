@@ -4,6 +4,12 @@
 <head>
 <meta charset="UTF-8">
 <title>フルーツ情報</title>
+<!-- バリデーションエラー用スタイル -->
+<style>
+    .red {
+        color: red;
+    }
+</style>
 </head>
 <body>
     <h1>新規登録</h1>
@@ -13,26 +19,45 @@
     <form th:method="post" th:action="@{/create}" th:object="${fruitData}">
         <div>
             <label for="name">名称</label>
-			<!-- th:field - fruitDataオブジェクトのnameプロパティにアクセスして[id, name, value]属性を出力  -->
+		<!-- th:field - fruitDataオブジェクトのnameプロパティにアクセスして[id, name, value]を出力  -->
             <input type="text" th:field="*{name}" placeholder="名称を入力してください">
+		<!-- th:if - nameプロパティにバリデーションエラーがあるかどうか判定 -->
+		<!-- th:errors - nameプロパティに関連するバリデーションエラーを取得表示 -->
+		<!-- th:errorclass - nameプロパティにバリデーションエラーが存在する場合に指定のCSS要素を設定する -->
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorclass="red"></div>
         </div>
         <div>
-            <label for="price">価格</label>
-			<!-- th:field - fruitDataオブジェクトのpriceプロパティにアクセスして[id, name, value]属性を出力  -->
+            <label for="価格">価格</label>
+			<!-- th:field - fruitDataオブジェクトのpriceプロパティにアクセスして[id, name, value]を出力  -->
             <input type="text" th:field="*{price}" placeholder="価格を入力してください">
+
+			<!-- th:if - priceプロパティにバリデーションエラーがあるかどうか判定 -->
+			<!-- th:errors - priceプロパティに関連するバリデーションエラーを取得表示 -->
+			<!-- th:errorclass - priceプロパティにバリデーションエラーが存在する場合に指定のCSS要素を設定する -->
+            <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" th:errorclass="red"></div>
         </div>
         <div>
             <label for="prefecture_id">産地</label>
-			<!-- th:field - fruitDataオブジェクトのprefecture_idプロパティにアクセスして[id, name, value]属性を出力  -->
+			<!-- th:field - fruitDataオブジェクトのprefecture_idプロパティにアクセスして[id, name, value]を出力  -->
             <input type="text" th:field="*{prefecture_id}" placeholder="産地を入力してください">
+
+			<!-- th:if - prefecture_idプロパティにバリデーションエラーがあるかどうか判定 -->
+			<!-- th:errors - prefecture_idプロパティに関連するバリデーションエラーを取得表示 -->
+			<!-- th:errorclass - prefecture_idプロパティにバリデーションエラーが存在する場合に指定のCSS要素を設定する -->
+            <div th:if="${#fields.hasErrors('prefecture_id')}" th:errors="*{prefecture_id}" th:errorclass="red"></div>
         </div>
         <div>
-            <label for="seoson_id">旬の季節</label>
-			<!-- th:field - fruitDataオブジェクトのseason_idプロパティにアクセスして[id, name, value]属性を出力  -->
-            <input type="text" th:field="*{season_id}" placeholder="産地を入力してください">
+            <label for="season_id">旬の季節</label>
+			<!-- th:field - fruitDataオブジェクトのseason_idプロパティにアクセスして[id, name, value]を出力  -->
+            <input type="text" th:field="*{season_id}" placeholder="旬の季節を入力してください">
+
+			<!-- th:if - season_idプロパティにバリデーションエラーがあるかどうか判定 -->
+			<!-- th:errors - season_idプロパティに関連するバリデーションエラーを取得表示 -->
+			<!-- th:errorclass - season_idプロパティにバリデーションエラーが存在する場合に指定のCSS要素を設定する -->
+            <div th:if="${#fields.hasErrors('season_id')}" th:errors="*{season_id}" th:errorclass="red"></div>
         </div>
         <input type="submit" value="登録">
+        <a th:href="@{/}">戻る</a>
     </form>
-    <button onclick="window.location.href='/'">ＴＯＰへ</button>
 </body>
 </html>

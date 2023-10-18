@@ -4,6 +4,12 @@
 <head>
 <meta charset="UTF-8">
 <title>ユーザー情報</title>
+<!-- バリデーションエラー用スタイル -->
+<style>
+    .red {
+        color: red;
+    }
+</style>
 </head>
 <body>
     <h1>新規登録</h1>
@@ -13,21 +19,35 @@
     <form th:method="post" th:action="@{/create}" th:object="${userData}">
         <div>
             <label for="name">名前</label>
-			<!-- th:field - userDataオブジェクトのnameプロパティにアクセスして[id, name, value]属性を出力  -->
+		<!-- th:field - userDataオブジェクトのnameプロパティにアクセスして[id, name, value]を出力  -->
             <input type="text" th:field="*{name}" placeholder="名前を入力してください">
+		<!-- th:if - nameプロパティにバリデーションエラーがあるかどうか判定 -->
+		<!-- th:errors - nameプロパティに関連するバリデーションエラーを取得表示 -->
+		<!-- th:errorclass - nameプロパティにバリデーションエラーが存在する場合に指定のCSS要素を設定する -->
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorclass="red"></div>
         </div>
         <div>
             <label for="age">年齢</label>
-			<!-- th:field - userDataオブジェクトのageプロパティにアクセスして[id, name, value]属性を出力  -->
+			<!-- th:field - userDataオブジェクトのageプロパティにアクセスして[id, name, value]を出力  -->
             <input type="text" th:field="*{age}" placeholder="年齢を入力してください">
+
+			<!-- th:if - ageプロパティにバリデーションエラーがあるかどうか判定 -->
+			<!-- th:errors - ageプロパティに関連するバリデーションエラーを取得表示 -->
+			<!-- th:errorclass - ageプロパティにバリデーションエラーが存在する場合に指定のCSS要素を設定する -->
+            <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}" th:errorclass="red"></div>
         </div>
-        <div>
+                <div>
             <label for="gender">性別</label>
-			<!-- th:field - userDataオブジェクトのgenderプロパティにアクセスして[id, name, value]属性を出力  -->
+			<!-- th:field - userDataオブジェクトのgenderプロパティにアクセスして[id, name, value]を出力  -->
             <input type="text" th:field="*{gender}" placeholder="性別を入力してください">
+
+			<!-- th:if - genderプロパティにバリデーションエラーがあるかどうか判定 -->
+			<!-- th:errors - genderプロパティに関連するバリデーションエラーを取得表示 -->
+			<!-- th:errorclass - genderプロパティにバリデーションエラーが存在する場合に指定のCSS要素を設定する -->
+            <div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" th:errorclass="red"></div>
         </div>
         <input type="submit" value="登録">
+        <a th:href="@{/}">戻る</a>
     </form>
-    <button onclick="window.location.href='/'">ＴＯＰへ</button>
 </body>
 </html>

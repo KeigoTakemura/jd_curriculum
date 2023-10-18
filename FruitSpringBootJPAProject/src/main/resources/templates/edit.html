@@ -4,6 +4,11 @@
 <head>
 <meta charset="UTF-8">
 <title>フルーツ情報</title>
+<style>
+    .red {
+        color: red;
+    }
+</style>
 </head>
 <body>
     <h1>編集</h1>
@@ -16,21 +21,37 @@
             <label for="name">名称</label>
 			<!-- th:field - fruitDataオブジェクトのnameプロパティにアクセスして[id, name, value]属性を出力  -->
             <input type="text" th:field="*{name}">
+            <!-- th:if - nameプロパティにバリデーションエラーがあるかどうか判定 -->
+			<!-- th:errors - nameプロパティに関連するバリデーションエラーを取得表示 -->
+			<!-- th:errorclass - nameプロパティにバリデーションエラーが存在する場合に指定のCSS要素を設定する -->
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorclass="red"></div>
         </div>
         <div>
             <label for="price">価格</label>
 			<!-- th:field - fruitDataオブジェクトのpriceプロパティにアクセスして[id, name, value]属性を出力  -->
             <input type="text" th:field="*{price}">
+            <!-- th:if - priceプロパティにバリデーションエラーがあるかどうか判定 -->
+			<!-- th:errors - priceプロパティに関連するバリデーションエラーを取得表示 -->
+			<!-- th:errorclass - priceプロパティにバリデーションエラーが存在する場合に指定のCSS要素を設定する -->
+            <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" th:errorclass="red"></div>
         </div>
         <div>
             <label for="prefecture_id">産地</label>
 			<!-- th:field - fruitDataオブジェクトのprefecture_idプロパティにアクセスして[id, name, value]属性を出力  -->
             <input type="text" th:field="*{prefecture_id}">
+            <!-- th:if - prefecture_idプロパティにバリデーションエラーがあるかどうか判定 -->
+			<!-- th:errors - prefecture_idプロパティに関連するバリデーションエラーを取得表示 -->
+			<!-- th:errorclass - prefecture_idプロパティにバリデーションエラーが存在する場合に指定のCSS要素を設定する -->
+            <div th:if="${#fields.hasErrors('prefecture_id')}" th:errors="*{prefecture_id}" th:errorclass="red"></div>
         </div>
         <div>
             <label for="season_id">旬の季節</label>
 			<!-- th:field - fruitDataオブジェクトのseason_idプロパティにアクセスして[id, name, value]属性を出力  -->
             <input type="text" th:field="*{season_id}">
+            <!-- th:if - season_idプロパティにバリデーションエラーがあるかどうか判定 -->
+			<!-- th:errors - season_idプロパティに関連するバリデーションエラーを取得表示 -->
+			<!-- th:errorclass - season_idプロパティにバリデーションエラーが存在する場合に指定のCSS要素を設定する -->
+            <div th:if="${#fields.hasErrors('season_id')}" th:errors="*{season_id}" th:errorclass="red"></div>
         </div>
         <input type="submit" value="更新">
     </form>
