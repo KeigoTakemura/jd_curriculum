@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!-- Thymeleafテンプレートエンジンを使用していることを示す -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ユーザー情報</title>
+</head>
+<body>
+	<h1>ユーザー情報</h1>
+	<!-- リンク先のURLを指定する -->
+	<a th:href="@{/create}">新規登録</a>
+	<hr>
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>名前</th>
+			<th>年齢</th>
+			<th>性別</th>
+		</tr>
+		<!-- th:each - studnetListからユーザー情報を一行ずつ取得し、user変数に格納 -->
+		<tr th:each="user:${userList}">
+			<!-- th:text - userオブジェクトのidプロパティにアクセスし表示 -->
+			<td th:text="${user.id}"></td>
+			<!-- th:href - userオブジェクトのidプロパティにアクセスしURLに設定 -->
+			<!-- th:text - userオブジェクトのnameプロパティにアクセスし表示 -->
+			<td><a th:href="@{/edit/__${user.id}__}" th:text="${user.name}"></a></td>
+			<!-- th:text - userオブジェクトのageプロパティにアクセスし表示 -->
+			<td th:text="${user.age}"></td>
+			<!-- th:text - userオブジェクトのgenderプロパティにアクセスし表示 -->
+			<td th:text="${user.gender}"></td>
+			<td>
+				<!-- th:method - HTTPメソッドのDELETEを使用 -->
+				<!-- th:action - フォームの送信先を「ルートパス/delete」に設定 -->
+				<form th:method="delete" th:action="@{/delete}">
+					<!-- 非表示でデータを送信 -->
+					<!-- th:value - userオブジェクトのidプロパティにアクセスし値に設定 -->
+					<!-- リクエストパラメーターの名前をidとする -->
+					<input type="hidden" name="id" th:value="${user.id}">
+					<input type="submit" value="削除">
+				</form>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
