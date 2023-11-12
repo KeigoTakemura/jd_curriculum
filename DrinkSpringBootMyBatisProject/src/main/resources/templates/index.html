@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!-- Thymeleafテンプレートエンジンを使用していることを示す -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ドリンク情報</title>
+</head>
+<body>
+	<h1>ドリンク情報</h1>
+	<!-- リンク先のURLを指定する -->
+	<a th:href="@{/create}">新規登録</a>
+	<hr>
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>名前</th>
+			<th>価格</th>
+			<th>時間</th>
+		</tr>
+		<!-- th:each - drinkListからドリンク情報を一行ずつ取得し、drink変数に格納 -->
+		<tr th:each="drink:${drinkList}">
+			<!-- th:text - drinkオブジェクトのidプロパティにアクセスし表示 -->
+			<td th:text="${drink.id}"></td>
+			<!-- th:href - drinkオブジェクトのidプロパティにアクセスしURLに設定 -->
+			<!-- th:text - drinkオブジェクトのnameプロパティにアクセスし表示 -->
+			<td><a th:href="@{/edit/__${drink.id}__}" th:text="${drink.name}"></a></td>
+			<!-- th:text - drinkオブジェクトのpriceプロパティにアクセスし表示 -->
+			<td th:text="${drink.price}"></td>
+			<!-- th:text - drinkオブジェクトのtimeプロパティにアクセスし表示 -->
+			<td th:text="${drink.time}"></td>
+			<td>
+				<!-- th:method - HTTPメソッドのDELETEを使用 -->
+				<!-- th:action - フォームの送信先を「ルートパス/delete」に設定 -->
+				<form th:method="delete" th:action="@{/delete}">
+					<!-- 非表示でデータを送信 -->
+					<!-- th:value - drinkオブジェクトのidプロパティにアクセスし値に設定 -->
+					<!-- リクエストパラメーターの名前をidとする -->
+					<input type="hidden" name="id" th:value="${drink.id}">
+					<input type="submit" value="削除">
+				</form>
+			</td>
+			<td>
+				<!-- th:method - HTTPメソッドのPATCHを使用 -->
+				<!-- th:action - フォームの送信先を「ルートパス/logical/delete」に設定 -->
+				<form th:method="patch" th:action="@{/logical/delete}">
+					<!-- 非表示でデータを送信 -->
+					<!-- th:value - drinkオブジェクトのidプロパティにアクセスし値に設定 -->
+					<!-- リクエストパラメーターの名前をidとする -->
+					<input type="hidden" name="id" th:value="${drink.id}">
+					<input type="submit" value="論理削除">
+				</form>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- xmlのバージョンが1.0、エンコーディングがUTF-8であることを指定 -->
+<!-- MyBatisが使用するDTDを指定 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- com.example.demo.repository.FoodMapper という名前空間にマッピングする -->
+<mapper namespace="com.example.demo.repository.FoodMapper">
+
+<!-- フード情報テーブル内のすべてのレコードを検索するためのSELECT文 -->
+	<select id="findAll" resultType="com.example.demo.entity.Food">
+		SELECT
+			*
+		FROM
+			food
+        WHERE
+            delete_date IS NULL
+        ORDER BY
+        	id ASC
+	</select>
+<!-- フード情報テーブル内の指定されたIDのレコードを検索するためのSELECT文 -->
+	<select id="findById" resultType="com.example.demo.entity.Food">
+		SELECT
+			*
+		FROM
+			fruit
+        WHERE
+            delete_date IS NULL
+        AND
+			id = #{id}
+	</select>
+	
+<!-- 新しいフード情報をフード情報テーブルに追加するためのINSERT文 -->
+	<insert id="save">
+    	INSERT INTO
+        	food (name, price, time)
+    	VALUES
+        	(#{name}, #{price}, #{time})
+	</insert>
+	
+<!-- フード情報テーブル内の指定されたIDのレコードの価格を更新するためのUPDATE文 -->
+	<update id="update">
+		UPDATE
+			food
+		SET
+			price = #{price}
+		WHERE
+			id = #{id}
+	</update>
+	
+<!-- フード情報テーブル内の指定されたIDのレコードを削除するためのDELETE文 -->
+	<delete id="delete">
+		DELETE FROM
+			food
+		WHERE
+			id = #{id}
+	</delete>
+	
+<!-- フード情報テーブル内の指定されたIDのレコードを論理削除するためのUPDATE文 -->
+    <update id="logicalDelete">
+        UPDATE
+            food
+        SET
+			delete_date = CURRENT_TIMESTAMP
+		WHERE
+			id = #{id}
+	</update>
+</mapper>

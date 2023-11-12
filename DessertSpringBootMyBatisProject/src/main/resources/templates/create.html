@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!-- Thymeleafテンプレートエンジンを使用していることを示す -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>デザート情報</title>
+</head>
+<body>
+    <h1>新規登録</h1>
+	<!-- th:method - HTTPメソッドのPOSTを使用 -->
+	<!-- th:action - フォームの送信先を「ルートパス/create」に設定 -->
+	<!-- th:object - Controllerから渡ってきたオブジェクトにバインド -->
+    <form th:method="post" th:action="@{/create}" th:object="${dessertData}">
+        <div>
+            <label for="name">名前</label>
+			<!-- th:field - dessertDataオブジェクトのnameプロパティにアクセスして[id, name, value]属性を出力  -->
+            <input type="text" th:field="*{name}" placeholder="名前を入力してください">
+        </div>
+        <div>
+            <label for="price">価格</label>
+			<!-- th:field - dessertDataオブジェクトのpriceプロパティにアクセスして[id, name, value]属性を出力  -->
+            <input type="text" th:field="*{price}" placeholder="価格を入力してください">
+        </div>
+        <div>
+            <label for="time">時間</label>
+			<!-- th:field - dessertDataオブジェクトのtimeプロパティにアクセスして[id, name, value]属性を出力  -->
+            <input type="text" th:field="*{time}" placeholder="販売時間を入力してください">
+        </div>
+        <input type="submit" value="登録">
+    </form>
+</body>
+</html>
