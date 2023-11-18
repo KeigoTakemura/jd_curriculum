@@ -14,6 +14,9 @@ public interface DessertMapper {
 
     // IDを指定してデザートを検索するメソッド
 	Dessert findById(int id);
+	
+	// 検索フォームから受け取った情報をもとに動的検索を実施するメソッド
+    List<Dessert> search(Dessert dessert);
 
     // デザート情報を保存するメソッド
 	void save(Dessert dessert);

@@ -14,6 +14,9 @@ public interface DrinkMapper {
 
     // IDを指定してドリンクを検索するメソッド
 	Drink findById(int id);
+	
+	// 検索フォームから受け取った情報をもとに動的検索を実施するメソッド
+    List<Drink> search(Drink drink);
 
     // ドリンク情報を保存するメソッド
 	void save(Drink drink);

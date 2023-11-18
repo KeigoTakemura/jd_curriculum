@@ -14,6 +14,9 @@ public interface FruitMapper {
 
     // IDを指定してフルーツを検索するメソッド
 	Fruit findById(int id);
+	
+	// 検索フォームから受け取った情報をもとに動的検索を実施するメソッド
+    List<Fruit> search(Fruit fruit);
 
     // フルーツ情報を保存するメソッド
 	void save(Fruit fruit);

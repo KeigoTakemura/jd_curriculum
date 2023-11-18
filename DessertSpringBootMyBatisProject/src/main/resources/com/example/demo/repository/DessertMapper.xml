@@ -16,6 +16,25 @@
         ORDER BY
         	id ASC
 	</select>
+	
+<!-- 検索フォームの条件をもとにフルーツ情報テーブルのレコードを検索するためのSELECT文 -->
+	<select id="search" resultType="com.example.demo.entity.Dessert">
+		SELECT
+			*
+		FROM
+			dessert
+		WHERE
+			delete_date IS NULL
+		<if test="id != null and id != ''">
+		AND
+			id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+		AND
+			name LIKE '%'|| #{name} || '%'
+		</if>
+	</select>		
+	
 <!-- デザート情報テーブル内の指定されたIDのレコードを検索するためのSELECT文 -->
 	<select id="findById" resultType="com.example.demo.entity.Dessert">
 		SELECT

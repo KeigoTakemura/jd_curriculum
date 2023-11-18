@@ -1,27 +1,29 @@
 <!DOCTYPE html>
-<!-- Thymeleafテンプレートエンジンを使用していることを示す -->
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>生徒情報</title>
+<title th:text="#{label.title}"></title>
+<style>
+	.red {
+		color: red;
+	}
+</style>
 </head>
 <body>
-    <h1>新規登録</h1>
-	<!-- th:method - HTTPメソッドのPOSTを使用 -->
-	<!-- th:action - フォームの送信先を「ルートパス/create」に設定 -->
-	<!-- th:object - Controllerから渡ってきたオブジェクトにバインド -->
-    <form th:method="post" th:action="@{/create}" th:object="${studentData}">
-        <div>
-            <label for="name">名前</label>
-			<!-- th:field - studentDataオブジェクトのnameプロパティにアクセスして[id, name, value]属性を出力  -->
-            <input type="text" th:field="*{name}" placeholder="名前を入力してください">
-        </div>
-        <div>
-            <label for="score">点数</label>
-			<!-- th:field - studentDataオブジェクトのscoreプロパティにアクセスして[id, name, value]属性を出力  -->
-            <input type="text" th:field="*{score}" placeholder="点数を入力してください">
-        </div>
-        <input type="submit" value="登録">
-    </form>
+	<h1 th:text="#{label.save}"></h1>
+	<form th:method="post" th:action="@{/create}" th:object="${studentData}">
+		<div>
+			<label for="name" th:text="|#{label.name}: |"></label>
+			<input type="text" th:field="*{name}" placeholder="名前を入力してください">
+			<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorclass="red"></div>
+		</div>
+		<div>
+			<label for="score" th:text="|#{label.score}: |"></label>
+			<input type="text" th:field="*{score}" placeholder="点数を入力してください">
+			<div th:if="${#fields.hasErrors('score')}" th:errors="*{score}" th:errorclass="red"></div>
+		</div>
+		<input type="submit" th:value="#{button.save}">
+		<a th:href="@{/}" th:text="#{button.back}"></a>
+	</form>
 </body>
 </html>

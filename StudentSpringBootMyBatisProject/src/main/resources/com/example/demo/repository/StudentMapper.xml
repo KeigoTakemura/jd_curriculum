@@ -11,7 +11,12 @@
 			*
 		FROM
 			student
+        WHERE
+            delete_date IS NULL
+        ORDER BY
+        	id ASC
 	</select>
+
 <!-- 学生情報テーブル内の指定されたIDのレコードを検索するためのSELECT文 -->
 	<select id="findById" resultType="com.example.demo.entity.Student">
 		SELECT
@@ -19,7 +24,27 @@
 		FROM
 			student
         WHERE
+            delete_date IS NULL
+        AND
 			id = #{id}
+	</select>
+	
+<!-- 検索フォームの条件をもとに学生情報テーブルのレコードを検索するためのSELECT文 -->
+	<select id="search" resultType="com.example.demo.entity.Student">
+		SELECT
+			*
+		FROM
+			student
+		WHERE
+			delete_date IS NULL
+		<if test="id != null and id != ''">
+		AND
+			id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+		AND
+			name LIKE '%'|| #{name} || '%'
+		</if>
 	</select>
 	
 <!-- 新しい学生情報を学生情報テーブルに追加するためのINSERT文 -->
@@ -47,4 +72,15 @@
 		WHERE
 			id = #{id}
 	</delete>
+	
+<!-- 学生情報テーブル内の指定されたIDのレコードを論理削除するためのUPDATE文 -->
+    <update id="logicalDelete">
+        UPDATE
+            student
+        SET
+			delete_date = CURRENT_TIMESTAMP
+		WHERE
+			id = #{id}
+	</update>
+	
 </mapper>

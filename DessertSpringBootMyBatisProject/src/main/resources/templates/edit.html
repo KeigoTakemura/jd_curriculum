@@ -1,33 +1,35 @@
 <!DOCTYPE html>
-<!-- Thymeleafテンプレートエンジンを使用していることを示す -->
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>デザート情報</title>
+<title th:text="#{label.title}"></title>
+<style>
+	.red {
+		color: red;
+	}
+</style>
 </head>
 <body>
-    <h1>編集</h1>
-	<!-- th:method - HTTPメソッドのPUTを使用 -->
-	<!-- th:action - フォームの送信先を「ルートパス/update」に設定 -->
-	<!-- th:object - Controllerから渡ってきたオブジェクトにバインド -->
-    <form th:method="patch" th:action="@{/update}" th:object="${dessertData}">
-        <input type="hidden" th:field="*{id}">
-        <div>
-            <label for="name">名前</label>
-			<!-- th:field - dessertDataオブジェクトのnameプロパティにアクセスして[id, name, value]属性を出力  -->
-            <input type="text" th:field="*{name}">
-        </div>
-        <div>
-            <label for="price">価格</label>
-			<!-- th:field - dessertDataオブジェクトのpriceプロパティにアクセスして[id, name, value]属性を出力  -->
-            <input type="text" th:field="*{price}">
-        </div>
-        <div>
-            <label for="time">時間</label>
-			<!-- th:field - dessertDataオブジェクトのtimeプロパティにアクセスして[id, name, value]属性を出力  -->
-            <input type="text" th:field="*{time}">
-        </div>
-        <input type="submit" value="更新">
-    </form>
+	<h1 th:text="#{label.edit}"></h1>
+	<form th:method="patch" th:action="@{/update}" th:object="${dessertData}">
+		<input type="hidden" th:field="*{id}">
+		<div>
+			<label for="name" th:text="|#{label.name}: |"></label>
+			<input type="text" th:field="*{name}">
+			<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorclass="red"></div>
+		</div>
+		<div>
+			<label for="price" th:text="|#{label.price}: |"></label>
+			<input type="text" th:field="*{price}">
+			<div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" th:errorclass="red"></div>
+		</div>
+		<div>
+			<label for=time th:text="|#{label.time}: |"></label>
+			<input type="text" th:field="*{time}">
+			<div th:if="${#fields.hasErrors('time')}" th:errors="*{time}" th:errorclass="red"></div>
+		</div>
+		<input type="submit" th:value="#{button.update}">
+		<a th:href="@{/}" th:text="#{button.back}"></a>
+	</form>
 </body>
 </html>

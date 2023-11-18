@@ -14,6 +14,9 @@ public interface UserMapper {
 
     // IDを指定してユーザーを検索するメソッド
 	User findById(int id);
+	
+	// 検索フォームから受け取った情報をもとに動的検索を実施するメソッド
+    List<User> search(User user);
 
     // ユーザー情報を保存するメソッド
 	void save(User user);
@@ -23,4 +26,7 @@ public interface UserMapper {
 
     // IDを指定してユーザーを削除するメソッド
 	void delete(int id);
+
+	// IDを指定してユーザーを論理削除するメソッド
+    void logicalDelete(int id);
 }

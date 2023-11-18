@@ -14,6 +14,9 @@ public interface FoodMapper {
 
     // IDを指定してフードを検索するメソッド
 	Food findById(int id);
+	
+	// 検索フォームから受け取った情報をもとに動的検索を実施するメソッド
+    List<Food> search(Food food);
 
     // フード情報を保存するメソッド
 	void save(Food food);

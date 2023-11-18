@@ -1,53 +1,49 @@
 <!DOCTYPE html>
-<!-- Thymeleafテンプレートエンジンを使用していることを示す -->
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>フード情報</title>
+<title th:text="#{label.title}"></title>
 </head>
 <body>
-	<h1>フード情報</h1>
-	<!-- リンク先のURLを指定する -->
-	<a th:href="@{/create}">新規登録</a>
+	<h1 th:text="#{label.title}"></h1>
+	<a th:href="@{/create}" th:text="#{button.new}"></a>
+	<hr>
+	<h3 th:text="#{label.search.form}"></h3>
+	<form th:method="post" th:action="@{/}" th:object="${foodQuery}">
+		<div>
+			<label for="id">ID: </label>
+				<input type="text" th:field="*{id}">
+		</div>
+		<div>
+			<label th:text="|#{label.name}: |"></label>
+			<input type="text" th:field="*{name}">
+		</div>
+		<input type="submit" th:value="#{button.search}">
+		<a th:href="@{/}" th:text="#{button.reset}"></a>
+	</form>
 	<hr>
 	<table>
 		<tr>
 			<th>ID</th>
-			<th>名前</th>
-			<th>価格</th>
-			<th>時間</th>
+			<th th:text="#{label.name}"></th>
+			<th th:text="#{label.price}"></th>
+			<th th:text="#{label.time}"></th>
 		</tr>
-		<!-- th:each - foodListからユーザー情報を一行ずつ取得し、food変数に格納 -->
 		<tr th:each="food:${foodList}">
-			<!-- th:text - foodオブジェクトのidプロパティにアクセスし表示 -->
 			<td th:text="${food.id}"></td>
-			<!-- th:href - foodオブジェクトのidプロパティにアクセスしURLに設定 -->
-			<!-- th:text - foodオブジェクトのnameプロパティにアクセスし表示 -->
 			<td><a th:href="@{/edit/__${food.id}__}" th:text="${food.name}"></a></td>
-			<!-- th:text - foodオブジェクトのpriceプロパティにアクセスし表示 -->
 			<td th:text="${food.price}"></td>
-			<!-- th:text - foodオブジェクトのtimeプロパティにアクセスし表示 -->
 			<td th:text="${food.time}"></td>
 			<td>
-				<!-- th:method - HTTPメソッドのDELETEを使用 -->
-				<!-- th:action - フォームの送信先を「ルートパス/delete」に設定 -->
 				<form th:method="delete" th:action="@{/delete}">
-					<!-- 非表示でデータを送信 -->
-					<!-- th:value - userオブジェクトのidプロパティにアクセスし値に設定 -->
-					<!-- リクエストパラメーターの名前をidとする -->
 					<input type="hidden" name="id" th:value="${food.id}">
-					<input type="submit" value="削除">
+					<input type="submit" th:value="#{button.delete}">
 				</form>
 			</td>
 			<td>
-				<!-- th:method - HTTPメソッドのPATCHを使用 -->
-				<!-- th:action - フォームの送信先を「ルートパス/logical/delete」に設定 -->
 				<form th:method="patch" th:action="@{/logical/delete}">
-					<!-- 非表示でデータを送信 -->
-					<!-- th:value - foodオブジェクトのidプロパティにアクセスし値に設定 -->
-					<!-- リクエストパラメーターの名前をidとする -->
 					<input type="hidden" name="id" th:value="${food.id}">
-					<input type="submit" value="論理削除">
+					<input type="submit" th:value="#{button.logical.delete}">
 				</form>
 			</td>
 		</tr>

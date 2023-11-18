@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.entity.Drink;
 import com.example.demo.form.DrinkData;
+import com.example.demo.form.DrinkQuery;
 import com.example.demo.service.DrinkService;
 
 import lombok.AllArgsConstructor;
@@ -42,6 +45,26 @@ public class DrinkController {
 		mv.setViewName("index");
         // データベースから所得したリストデータを「drinkList」という名前でモデルに設定する
 		mv.addObject("drinkList", drinkList);
+		// 検索値を受け取るため、空のフォームクラス「DrinkQuery」を設定する
+		mv.addObject("drinkQuery", new DrinkQuery());
+        // モデルデータとViewを返す(index.html)
+		return mv;
+	}
+	
+    // 検索結果をもとに一覧画面にアクセスするメソッド
+    // POSTリクエストを受け取ることを指定する。また、メソッドがマッピングするURLの定義する。
+	@PostMapping("")
+    // @ModelAttribute: リクエストパラメーターから受け取ったデータからDrinkQueryオブジェクトを作成する
+    // ModelAndView: ビュー名とモデルデータを保持するオブジェクト
+	public ModelAndView search(@ModelAttribute DrinkQuery drinkQuery, ModelAndView mv) {
+        // 検索フォームのデータをエンティティに変換
+		Drink drink = drinkQuery.toEntity();
+		// 変換したデータをもとに検索
+		List<Drink> drinkList = drinkService.search(drink);
+        // 表示するView(HTML)の設定
+		mv.setViewName("index");
+        // データベースから所得したリストデータを「drinkList」という名前でモデルに設定する
+		mv.addObject("drinkList", drinkList);
         // モデルデータとViewを返す(index.html)
 		return mv;
 	}
@@ -59,17 +82,35 @@ public class DrinkController {
 		return mv;
 	}
 	
-    // 新規登録処理を行うメソッド
-    // POSTリクエストを受け取ることを指定する。また、メソッドがマッピングするURLの定義する。
+	// 新規登録処理を行うメソッド
+	// POSTリクエストを受け取ることを指定する。また、メソッドがマッピングするURLの定義する。
 	@PostMapping("/create")
-    // @ModelAttribute: リクエストパラメーターから受け取ったデータからDrinkDataオブジェクトを作成する
-	public String save(@ModelAttribute DrinkData drinkData) {
-        // 入力フォームのデータをエンティティに変換
-		Drink drink = drinkData.toEntity();
-        // 変換したデータをデータベースへ保存
-		drinkService.save(drink);
-        // 一覧画面(index.html)へリダイレクト
-		return "redirect:/";
+	// @ModelAttribute: リクエストパラメーターから受け取ったデータからDrinkDataオブジェクトを作成する
+	// @Validated: 入力フォームのデータ検証
+	// BindingResult: 検証結果を保持
+	// ModelAndView: ビュー名とモデルデータを保持するオブジェクト
+	public ModelAndView save(@ModelAttribute @Validated DrinkData drinkData, BindingResult result, ModelAndView mv) {
+	    // ServiceロジックのisValidメソッドを呼び出し、結果をboolean型で受け取る
+	    boolean isValid = drinkService.isValid(drinkData, result);
+	    // 入力フォームの検証結果にエラーが含まれる場合、入力値を保持した状態で新規登録画面へ戻す。
+	    // デフォルトのバリデーションチェック or カスタムバリデーションにエラーが検出されたらcreate.htmlへ返す
+		if (result.hasErrors() || !isValid) {
+	        // 表示するView(HTML)の設定
+			mv.setViewName("create");
+	        // モデルデータとViewを返す(新規登録画面create.html)
+			return mv;
+
+	    // 検証結果にエラーが含まれない場合、登録処理を行う。
+		} else {
+	        // 入力フォームのデータをエンティティに変換
+			Drink drink = drinkData.toEntity();
+	        // 変換したデータをデータベースへ保存
+			drinkService.save(drink);
+	        // リダイレクト先の設定
+			mv.setViewName("redirect:/");
+	        // モデルデータとViewを返す(一覧画面index.html)
+			return mv;			
+		}
 	}
 	
     // 編集画面にアクセスするメソッド
@@ -89,16 +130,34 @@ public class DrinkController {
 	}
 
 	// 更新処理を行うメソッド
-    // PATCHリクエストを受け取ることを指定する。また、メソッドがマッピングするURLの定義する。
+	// PATCHリクエストを受け取ることを指定する。また、メソッドがマッピングするURLの定義する。      
 	@PatchMapping("/update")
-    // @ModelAttribute: リクエストパラメーターから受け取ったデータからDrinkDataオブジェクトを作成する
-	public String update(@ModelAttribute DrinkData drinkData) {
-        // 入力フォームから受け取った更新データをエンティティに変換
-		Drink drink = drinkData.toEntity();
-        // 変換したデータを使用してデータベースを更新
-		drinkService.update(drink);
-        // 更新対象者の編集画面(edit.html)へリダイレクト
-		return "redirect:/edit/" + drink.getId();
+	// @ModelAttribute: リクエストパラメーターから受け取ったデータからDrinkDataオブジェクトを作成する
+	// @Validated: 入力フォームのデータ検証
+	// BindingResult: 検証結果を保持
+	// ModelAndView: ビュー名とモデルデータを保持するオブジェクト
+	public ModelAndView update(@ModelAttribute @Validated DrinkData drinkData, BindingResult result, ModelAndView mv) {
+	    // ServiceロジックのisValidメソッドを呼び出し、結果をboolean型で受け取る
+	    boolean isValid = drinkService.isValid(drinkData, result);
+	    // 入力フォームの検証結果にエラーが含まれる場合、入力値を保持した状態で新規登録画面へ戻す。
+	    // デフォルトのバリデーションチェック or カスタムバリデーションにエラーが検出されたらcreate.htmlへ返す
+		if (result.hasErrors() || !isValid) {
+	        // 表示するView(HTML)の設定
+			mv.setViewName("edit");
+	        // モデルデータとViewを返す(新規登録画面edit.html)
+			return mv;
+
+	    // 検証結果にエラーが含まれない場合、登録処理を行う。
+		} else {
+	        // 入力フォームのデータをエンティティに変換
+			Drink drink = drinkData.toEntity();
+	        // 変換したデータでデータベースを更新
+			drinkService.update(drink);
+	        // リダイレクト先の設定
+			mv.setViewName("redirect:/edit/" + drink.getId());
+	        // モデルデータとViewを返す(一覧画面index.html)
+			return mv;
+		}
 	}
 	
     // 削除処理を行うメソッド
